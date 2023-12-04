@@ -11,7 +11,7 @@ TO-DO:
 
 */
 
-const int N = 7;
+const int N = 9;
 
 const int dx[] = {1, 0, -1, 0};
 const int dy[] = {0, -1, 0, 1};
@@ -51,7 +51,7 @@ int main() {
         pair<int, int> p;
         cin >> p.first >> p.second;
         char c; cin >> c;
-        if(c == 'h') {
+        if(c == 'v') {
             wood_blocks[p.first][p.second] = true;
             if(p.first + 1 < N)
                 wood_blocks[p.first + 1][p.second] = true;
@@ -65,7 +65,17 @@ int main() {
             if(p.second - 1 >= 0)
                 wood_blocks[p.first][p.second - 1] = true;
         }
-    }    
+    }
+
+    // Marking border edges as visited
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(i == 0 || i == n - 1 || j == 0 || j == n - 1) {
+                wood_blocks[i][j] = true;
+            }
+        }
+    }
 
     // Graph Traversal
     
@@ -115,8 +125,25 @@ int main() {
     // Conversion to cardinal directions
 
     // Check if there exists a path containing all bonus zones (wood blocks may block off gate zones)
-    for(int i = 0; i < (1 << n_bonus); i++){
-
+    // Assume all zones are open, if not, change manually in GUI.
+    int curr_dir;
+    if(start.first == 0) {
+        curr_dir = 0;
     }
+    else if(start.first == n - 1) {
+        curr_dir = 2;
+    }
+    else if(start.second == 0) {
+        curr_dir = 1;
+    }
+    else {
+        curr_dir = 3;
+    }
+    vector<string> instructions;
+    for(int i = 0; i < minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1] - 1; i++) {
+        pair<int, int> a = minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1][i];
+        pair<int, int> b = minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1][i + 1];
+
+    } 
 
 }
