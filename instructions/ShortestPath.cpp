@@ -1,4 +1,5 @@
 #include <bits/stdc++.h> 
+#define pb push_back
 
 using namespace std;
 
@@ -18,8 +19,8 @@ const int dy[] = {0, -1, 0, 1};
 // const char dir[] = {'R', 'D', 'L', 'U'};
 
 int main() {
-    freopen("input.in", "r", stdin);
-    freopen("output.out", "w", stdout);
+    // freopen("input.in", "r", stdin);
+    // freopen("output.out", "w", stdout);
     
     /*
     Input Format:
@@ -31,10 +32,10 @@ int main() {
     [Wooden Block 1] [Wooden Block 2] [Wooden Block 3] ... [Wooden Block N]
     */
 
-    // 7x7 grid, start point is outside of boundaries (we don't want to move along outer grid lines)
+    // 9x9 grid, start point is outside of boundaries (we don't want to move along outer grid lines)
 
-    // input
-    pair<int, int> start, target;
+    // input 
+    pair<int, int> start = {-1, -1}, target = {-1, -1};
     cin >> start.first >> start.second >> target.first >> target.second; 
     int n_bonus; 
     cin >> n_bonus;
@@ -69,9 +70,9 @@ int main() {
 
     // Marking border edges as visited
 
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            if(i == 0 || i == n - 1 || j == 0 || j == n - 1) {
+    for(int i = 0; i < N; i++) {
+        for(int j = 0; j < N; j++) {
+            if(i == 0 || i == N - 1 || j == 0 || j == N - 1) {
                 wood_blocks[i][j] = true;
             }
         }
@@ -130,7 +131,7 @@ int main() {
     if(start.first == 0) {
         curr_dir = 0;
     }
-    else if(start.first == n - 1) {
+    else if(start.first == N - 1) {
         curr_dir = 2;
     }
     else if(start.second == 0) {
@@ -140,10 +141,37 @@ int main() {
         curr_dir = 3;
     }
     vector<string> instructions;
-    for(int i = 0; i < minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1] - 1; i++) {
+    for(int i = 0; i < (int)minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1].size() - 1; i++) {
         pair<int, int> a = minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1][i];
         pair<int, int> b = minimum_path[target.first][target.second][1 << (n_bonus + 1) - 1][i + 1];
-
+        int dist = abs(a.first - b.first) + abs(a.second - b.second);
+        int ndir = -1;
+        if(b.first - a.first > 0) {
+            ndir = 0;
+        }
+        else if(b.first - a.first < 0) {
+            ndir = 2;
+        }
+        else if(b.second - a.second > 0) {
+            ndir = 1;
+        }
+        else {
+            ndir = 3;
+        }
+        if(abs(ndir - curr_dir) == 2) {
+            instructions.pb("left");
+            instructions.pb("left");
+        }
+        else if(ndir - curr_dir == 1) {
+            instructions.pb("right");
+        }
+        else if(ndir - curr_dir == -1) {
+            instructions.pb("left");
+        }
+        instructions.pb("tile " + to_string(dist));
     } 
-
+    for(string s : instructions) {
+        cout << s << '\n';
+    }
+    return 0;
 }
